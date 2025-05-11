@@ -13,13 +13,16 @@ import java.util.UUID
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.Material
 import org.bukkit.event.block.Action
+import org.bukkit.command.Command
+import org.bukkit.command.CommandSender
 import org.bukkit.configuration.file.FileConfiguration
 
 class EntitySmasher : JavaPlugin(), Listener {
 
     var active: MutableMap<Player, Entity> = mutableMapOf()
     val func = Functions(this)
-    lateinit var config: FileConfiguration
+    lateinit var configs: FileConfiguration
+    lateinit var defaults: MutableMap<String, String>
 
     @EventHandler
     fun onRClick(event: PlayerInteractEntityEvent) {
@@ -28,17 +31,30 @@ class EntitySmasher : JavaPlugin(), Listener {
         val entity = event.rightClicked
         val sneak = player.isSneaking
 
-        if (func.get("sneak_to_select"))
-        active[player] = entity
+        if (func.get("sneak_to_select").equals(sneak.toString())) {
+            if (active.containsKey(player)) {
+                func.msg(player, "entity_already_selected")
+            } else {
+                active[player] = entity
+                func.msg(player, "entity_select")
+            } 
+        }
     }
 
     @EventHandler
     fun onBClick(event: PlayerInteractEvent) {
         val player = event.player
-        val block = event.clickedBlock
-        if (event.action != Action.RIGHT_CLICK_BLOCK && event.action != Action.RIGHT_CLICK_AIR) return
-        if (block?.type == Material.AIR) {
-            active.remove(player)
+        val action = event.action
+        val sneak = player.isSneaking
+        if (event.hand == EquipmentSlot.OFF_HAND) return
+        if (action == Action.RIGHT_CLICK_BLOCK) {
+            if (func.get("sneak_to_deselect").equals(sneak.toString())) {
+                val c = active.containsKey(player)
+                active.remove(player)
+                if (c) {
+                    func.msg(player, "entity_deselect")
+                }
+            }
         }
     }
 
@@ -53,17 +69,33 @@ class EntitySmasher : JavaPlugin(), Listener {
         val player = event.player
         val entity = active[player]
         if (entity == null) return
-        if (!entity.isValid && entity.isDead) return
+        if (!entity.isValid && entity.isDead) {
+            active.remove(player)
+            func.msg(player, "entity_deselect_death")
+        }
 
     }
 
     override fun onEnable() {
         server.pluginManager.registerEvents(this, this)
-        config = func.cfginit()
+        configs = func.cfginit()
+        defaults = func.defaults()
         logger.info("EntitySmasher is active.")
     }
     override fun onDisable() {
         logger.info("EntitySmasher disabled.")
+    }
+
+    override fun onCommand(sender: CommandSender, cmd: Command, label: String, args: Array<String>): Boolean {
+        if (cmd.getName().equals("or", ignoreCase = true) && sender is Player) {
+            if (args.size == 0) {
+                func.msg(sender, "")
+            } else {
+                val far = args[0]
+            }
+            return true
+        }
+        return false
     }
 
 }
