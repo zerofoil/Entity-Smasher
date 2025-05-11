@@ -24,13 +24,13 @@ sourceSets {
     main {
         kotlin.srcDirs("src/EntitySmasher")
         resources.srcDirs("src")
-        resources.includes.addAll(listOf("plugin.yml"))
+        resources.includes.addAll(listOf("plugin.yml", "config.yml"))
     }
 }
 
 tasks.jar {
     from("src") {
-        include("plugin.yml")
+        include("plugin.yml", "config.yml")
     }
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     from(configurations.runtimeClasspath.get().map { if (it.isDirectory) it else zipTree(it) })
