@@ -1,0 +1,4 @@
+name: PluginName
+version: 1
+main: PluginName.PluginName
+api-version: '1.20'
