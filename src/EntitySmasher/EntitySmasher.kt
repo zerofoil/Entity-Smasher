@@ -19,10 +19,12 @@ import org.bukkit.command.CommandSender
 import org.bukkit.configuration.file.FileConfiguration
 import org.bukkit.util.Vector
 import org.bukkit.Bukkit
+import net.md_5.bungee.api.ChatMessageType
+import net.md_5.bungee.api.chat.TextComponent
 
 class EntitySmasher : JavaPlugin(), Listener {
 
-    var active: MutableMap<Player, Entity> = mutableMapOf()
+    var active: MutableMap<Player, MutableMap<String, Any>> = mutableMapOf()
     val func = Functions(this)
     lateinit var configs: FileConfiguration
     lateinit var defaults: MutableMap<String, String>
@@ -38,7 +40,11 @@ class EntitySmasher : JavaPlugin(), Listener {
             if (active.containsKey(player)) {
                 func.msg(player, "entity_already_selected")
             } else {
-                active[player] = entity
+                val new: MutableMap<String, Any> = mutableMapOf(
+                    "e" to entity,
+                    "distance" to func.get("default_distance").toDouble()
+                )
+                active.put(player, new)
                 func.msg(player, "entity_select")
             } 
         }
@@ -69,8 +75,7 @@ class EntitySmasher : JavaPlugin(), Listener {
 
     fun toDo() {
         for (player in active.keys) {
-            val entity = active[player]
-            if (entity == null) return
+            val entity = active[player]!!["e"] as Entity
             if (!entity.isValid && entity.isDead) {
                 active.remove(player)
                 func.msg(player, "entity_deselect_death")
@@ -98,9 +103,35 @@ class EntitySmasher : JavaPlugin(), Listener {
         val player = event.player
         val prev = event.previousSlot
         val new = event.newSlot
-
+        
         if (func.get("scroll_zoom").equals("true")) {
-            if 
+            try {
+                val distc = active[player]!!["distance"] as Double
+                var max = func.get("distance_limit_max").toDoubleOrNull() ?: 20.0
+                var min = func.get("distance_limit_min").toDoubleOrNull() ?: 2.0
+                var step = func.get("distance_scroll_step").toDoubleOrNull() ?: 0.2
+                if (player.isSneaking) {
+                    step = step*2
+                }
+                var newdistc = when {
+                    (new == 0 && prev == 8) -> maxOf(distc - step, min)
+                    (new == 8 && prev == 0) -> minOf(distc + step, max)
+                    (new > prev) -> maxOf(distc - step, min)
+                    (new < prev) -> minOf(distc + step, max)
+                    else -> distc
+                }
+                newdistc = String.format("%.2f", newdistc).toDouble()
+                active[player]!!["distance"] = newdistc
+
+                player.spigot().sendMessage(
+                    ChatMessageType.ACTION_BAR,
+                    *TextComponent.fromLegacyText(
+                        func.get("changed_distance").replace("&", "§").replace("%distance%", "$newdistc")
+                    )
+                )
+            } catch (e: NullPointerException) {
+                return
+            }
         }
     }
 

@@ -7,3 +7,8 @@ entity_deselect: "&cEntity deselected."
 entity_deselect_death: "&cEntity unavailable, deselecting..."
 entity_already_selected: "&cYou have already entity selected! Deselect first."
 
+scroll_zoom: true
+changed_distance: "&aDistance changed to %distance%"
+distance_limit_min: 2
+distance_limit_max: 20
+distance_scroll_step: 0.2
