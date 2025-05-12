@@ -4,7 +4,9 @@ import org.bukkit.configuration.file.FileConfiguration
 import org.bukkit.configuration.file.YamlConfiguration
 import java.io.File
 import org.bukkit.entity.Player
+import org.bukkit.entity.Entity
 import org.bukkit.ChatColor.translateAlternateColorCodes
+import kotlin.math.*
 
 class Functions(private val plugin: EntitySmasher) {
     
@@ -39,4 +41,40 @@ class Functions(private val plugin: EntitySmasher) {
         }
     }
 
+    fun nextPos(player: Player, entity: Entity): Triple<Int, Int, Int> {
+        val pp = player.location
+        val plpitch = pp.pitch.toDouble()
+        val plyaw = pp.yaw.toDouble()
+        val plx = pp.x
+        val ply = pp.y
+        val plz = pp.z
+        val op = entity.location
+        val obx = op.x
+        val oby = op.y
+        val obz = op.z
+
+        val distance: Int = get("how_far").toIntOrNull() ?: 10
+
+        val pitchRad = Math.toRadians(plpitch)
+        val yawRad = Math.toRadians(plyaw)
+
+        val x = -sin(yawRad) * cos(pitchRad)
+        val y = -sin(pitchRad)
+        val z = cos(yawRad) * cos(pitchRad)
+
+        val length = sqrt(x * x + y * y + z * z)
+        val nx = x / length * distance
+        val ny = y / length * distance
+        val nz = z / length * distance
+
+        val targetX = plx + nx
+        val targetY = ply + ny
+        val targetZ = plz + nz
+
+        val moveX = targetX - obx
+        val moveY = targetY - oby
+        val moveZ = targetZ - obz
+
+        return Triple(moveX.toInt(), moveY.toInt(), moveZ.toInt())
+    }
 }

@@ -16,6 +16,8 @@ import org.bukkit.event.block.Action
 import org.bukkit.command.Command
 import org.bukkit.command.CommandSender
 import org.bukkit.configuration.file.FileConfiguration
+import org.bukkit.util.Vector
+import org.bukkit.Bukkit
 
 class EntitySmasher : JavaPlugin(), Listener {
 
@@ -64,22 +66,26 @@ class EntitySmasher : JavaPlugin(), Listener {
         active.remove(player)
     }
 
-    @EventHandler
-    fun onMove(event: PlayerMoveEvent) {
-        val player = event.player
-        val entity = active[player]
-        if (entity == null) return
-        if (!entity.isValid && entity.isDead) {
-            active.remove(player)
-            func.msg(player, "entity_deselect_death")
+    fun toDo() {
+        for (player in active.keys) {
+            val entity = active[player]
+            if (entity == null) return
+            if (!entity.isValid && entity.isDead) {
+                active.remove(player)
+                func.msg(player, "entity_deselect_death")
+            }
+            val (x, y, z) = func.nextPos(player, entity)
+            entity.velocity = Vector(x, y, z)
         }
-
     }
 
     override fun onEnable() {
         server.pluginManager.registerEvents(this, this)
         configs = func.cfginit()
         defaults = func.defaults()
+        Bukkit.getScheduler().runTaskTimer(this, Runnable {
+            toDo()
+        }, 0L, 1L)
         logger.info("EntitySmasher is active.")
     }
     override fun onDisable() {
@@ -91,7 +97,7 @@ class EntitySmasher : JavaPlugin(), Listener {
             if (args.size == 0) {
                 func.msg(sender, "")
             } else {
-                val far = args[0]
+                func.msg(sender, "")
             }
             return true
         }
