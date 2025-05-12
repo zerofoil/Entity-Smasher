@@ -27,7 +27,7 @@ class Functions(private val plugin: EntitySmasher) {
         return mutableMapOf(
             "sneak_to_select" to "true",
             "sneak_to_deselect" to "true",
-            "how_far" to "10",
+            "default_distance" to "10",
             "entity_select" to "&aEntity selected.",
             "entity_deselect" to "&cEntity deselected.",
             "entity_deselect_death" to "&cEntity unavailable, deselecting...",
@@ -41,7 +41,7 @@ class Functions(private val plugin: EntitySmasher) {
         }
     }
 
-    fun nextPos(player: Player, entity: Entity): Triple<Int, Int, Int> {
+    fun nextPos(player: Player, entity: Entity): Triple<Double, Double, Double> {
         val pp = player.location
         val plpitch = pp.pitch.toDouble()
         val plyaw = pp.yaw.toDouble()
@@ -53,7 +53,7 @@ class Functions(private val plugin: EntitySmasher) {
         val oby = op.y
         val obz = op.z
 
-        val distance: Int = get("how_far").toIntOrNull() ?: 10
+        val distance: Int = get("default_distance").toIntOrNull() ?: 10
 
         val pitchRad = Math.toRadians(plpitch)
         val yawRad = Math.toRadians(plyaw)
@@ -75,6 +75,6 @@ class Functions(private val plugin: EntitySmasher) {
         val moveY = targetY - oby
         val moveZ = targetZ - obz
 
-        return Triple(moveX.toInt(), moveY.toInt(), moveZ.toInt())
+        return Triple(moveX, moveY, moveZ)
     }
 }

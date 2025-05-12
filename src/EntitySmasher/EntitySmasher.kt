@@ -11,6 +11,7 @@ import org.bukkit.entity.Player
 import org.bukkit.entity.Entity
 import java.util.UUID
 import org.bukkit.event.player.PlayerInteractEvent
+import org.bukkit.event.player.PlayerItemHeldEvent
 import org.bukkit.Material
 import org.bukkit.event.block.Action
 import org.bukkit.command.Command
@@ -92,8 +93,19 @@ class EntitySmasher : JavaPlugin(), Listener {
         logger.info("EntitySmasher disabled.")
     }
 
+    @EventHandler
+    fun onScroll(event: PlayerItemHeldEvent) {
+        val player = event.player
+        val prev = event.previousSlot
+        val new = event.newSlot
+
+        if (func.get("scroll_zoom").equals("true")) {
+            if 
+        }
+    }
+
     override fun onCommand(sender: CommandSender, cmd: Command, label: String, args: Array<String>): Boolean {
-        if (cmd.getName().equals("or", ignoreCase = true) && sender is Player) {
+        if (cmd.getName().equals("es", ignoreCase = true) && sender is Player) {
             if (args.size == 0) {
                 func.msg(sender, "")
             } else {
