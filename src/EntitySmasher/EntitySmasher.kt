@@ -177,7 +177,7 @@ class EntitySmasher : JavaPlugin(), Listener {
     override fun onTabComplete(sender: CommandSender, cmd: Command, label: String, args: Array<String>): List<String> {
         if(cmd.getName().equals("es", ignoreCase = true)) { // to be continued...
             return when (args.size) {
-                1 -> listOf("reload", "sec").filter { it.startsWith(args[0]) }
+                1 -> listOf("reload").filter { it.startsWith(args[0]) }
                 else -> emptyList()
             }
         }
