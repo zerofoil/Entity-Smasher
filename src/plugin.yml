@@ -1,4 +1,7 @@
 name: EntitySmasher
 version: 1
 main: EntitySmasher.EntitySmasher
-api-version: '1.20'
+commands:
+  es:
+    description: Main command for EntitySmasher plugin.
+    usage: /es

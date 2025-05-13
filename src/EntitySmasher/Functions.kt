@@ -36,7 +36,12 @@ class Functions(private val plugin: EntitySmasher) {
             "changed_distance" to "&aDistance changed to %distance%",
             "distance_limit_min" to "2",
             "distance_limit_max" to "20",
-            "distance_scroll_step" to "0.2"
+            "distance_scroll_step" to "0.2",
+            "death_particles" to "true",
+            "unknown_command" to "&cSorry, but i don't recognize this command.",
+            "allow_players" to "false",
+            "allow_boat_minecart" to "false",
+            "fall_damage" to "true"
         )
     }
 
@@ -58,6 +63,7 @@ class Functions(private val plugin: EntitySmasher) {
             val obx = op.x
             val oby = op.y
             val obz = op.z
+            val height = entity.boundingBox.height / 2
     
             val distance = plugin.active[player]!!["distance"] as Double
     
@@ -80,7 +86,7 @@ class Functions(private val plugin: EntitySmasher) {
             val moveX = targetX - obx
             val moveY = targetY - oby
             val moveZ = targetZ - obz
-            return Triple(moveX, moveY, moveZ)       
+            return Triple(moveX, moveY+height, moveZ)       
         } catch (e: NullPointerException) {
             return Triple(0.0, 0.0, 0.0)
         }

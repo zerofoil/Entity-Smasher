@@ -6,9 +6,14 @@ entity_select: "&aEntity selected."
 entity_deselect: "&cEntity deselected."
 entity_deselect_death: "&cEntity unavailable, deselecting..."
 entity_already_selected: "&cYou have already entity selected! Deselect first."
+unknown_command: "&cSorry, but i don't recognize this command."
 
 scroll_zoom: true
 changed_distance: "&aDistance changed to %distance%"
 distance_limit_min: 2
 distance_limit_max: 20
 distance_scroll_step: 0.2
+death_particles: true
+allow_players: false
+allow_boat_minecart: false
+fall_damage: true

@@ -9,6 +9,8 @@ import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.inventory.EquipmentSlot
 import org.bukkit.entity.Player
 import org.bukkit.entity.Entity
+import org.bukkit.entity.Boat
+import org.bukkit.entity.Minecart
 import java.util.UUID
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerItemHeldEvent
@@ -16,9 +18,11 @@ import org.bukkit.Material
 import org.bukkit.event.block.Action
 import org.bukkit.command.Command
 import org.bukkit.command.CommandSender
+import org.bukkit.command.ConsoleCommandSender
 import org.bukkit.configuration.file.FileConfiguration
 import org.bukkit.util.Vector
 import org.bukkit.Bukkit
+import org.bukkit.Particle
 import net.md_5.bungee.api.ChatMessageType
 import net.md_5.bungee.api.chat.TextComponent
 
@@ -35,7 +39,12 @@ class EntitySmasher : JavaPlugin(), Listener {
         val player = event.player
         val entity = event.rightClicked
         val sneak = player.isSneaking
-
+        if (entity is Boat || entity is Minecart) {
+            if (func.get("allow_boat_minecart").equals("false")) return
+        }
+        if (entity is Player) {
+            if (func.get("allow_players").equals("false")) return
+        }
         if (func.get("sneak_to_select").equals(sneak.toString())) {
             if (active.containsKey(player)) {
                 func.msg(player, "entity_already_selected")
@@ -77,11 +86,26 @@ class EntitySmasher : JavaPlugin(), Listener {
         for (player in active.keys) {
             val entity = active[player]!!["e"] as Entity
             if (!entity.isValid && entity.isDead) {
+                if (func.get("death_particles").equals("true")) {
+                    val loc = entity.location
+                    val world = loc.world
+
+                    world?.spawnParticle(
+                        Particle.FLAME,
+                        loc,
+                        200,
+                        0.0, 0.0, 0.0,
+                        0.5
+                    )
+                }
                 active.remove(player)
                 func.msg(player, "entity_deselect_death")
             }
             val (x, y, z) = func.nextPos(player, entity)
             entity.velocity = Vector(x, y, z)
+            if (func.get("fall_damage").equals("false")) {
+                entity.fallDistance = 0f
+            }
         }
     }
 
@@ -138,13 +162,24 @@ class EntitySmasher : JavaPlugin(), Listener {
     override fun onCommand(sender: CommandSender, cmd: Command, label: String, args: Array<String>): Boolean {
         if (cmd.getName().equals("es", ignoreCase = true) && sender is Player) {
             if (args.size == 0) {
-                func.msg(sender, "")
+                if (sender in active) {
+                    active.remove(sender)
+                    func.msg(sender, "entity_deselect")
+                }
             } else {
-                func.msg(sender, "")
+                func.msg(sender, "unknown_command")
             }
             return true
         }
         return false
     }
 
+    override fun onTabComplete(sender: CommandSender, cmd: Command, label: String, args: Array<String>): List<String> {
+        if(cmd.getName().equals("es", ignoreCase = true)) { // to be continued...
+            return when (args.size) {
+                else -> emptyList()
+            }
+        }
+        return emptyList()
+    }
 }
