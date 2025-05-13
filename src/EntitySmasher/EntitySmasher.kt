@@ -11,6 +11,7 @@ import org.bukkit.entity.Player
 import org.bukkit.entity.Entity
 import org.bukkit.entity.Boat
 import org.bukkit.entity.Minecart
+import org.bukkit.entity.Monster
 import java.util.UUID
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerItemHeldEvent
@@ -39,12 +40,13 @@ class EntitySmasher : JavaPlugin(), Listener {
         val player = event.player
         val entity = event.rightClicked
         val sneak = player.isSneaking
-        if (entity is Boat || entity is Minecart) {
-            if (func.get("allow_boat_minecart").equals("false")) return
+
+        when (entity) {
+            is Boat, is Minecart -> if (func.get("allow_boat_minecart").equals("false")) return
+            is Player -> if (func.get("allow_players").equals("false")) return
+            is Monster -> if (func.get("allow_monsters").equals("false")) return
         }
-        if (entity is Player) {
-            if (func.get("allow_players").equals("false")) return
-        }
+
         if (func.get("sneak_to_select").equals(sneak.toString())) {
             if (active.containsKey(player)) {
                 func.msg(player, "entity_already_selected")
@@ -166,6 +168,12 @@ class EntitySmasher : JavaPlugin(), Listener {
                     active.remove(sender)
                     func.msg(sender, "entity_deselect")
                 }
+            } else if (args.size == 1 && args[0] == "reload") {
+                if (sender.isOp) {
+                    func.msg(sender, "reload_start")
+                    configs = func.cfginit()
+                    func.msg(sender, "reload_end")
+                }
             } else {
                 func.msg(sender, "unknown_command")
             }
@@ -177,7 +185,7 @@ class EntitySmasher : JavaPlugin(), Listener {
     override fun onTabComplete(sender: CommandSender, cmd: Command, label: String, args: Array<String>): List<String> {
         if(cmd.getName().equals("es", ignoreCase = true)) { // to be continued...
             return when (args.size) {
-                1 -> listOf("reload").filter { it.startsWith(args[0]) }
+                1 -> if (sender.isOp) {listOf("reload").filter { it.startsWith(args[0]) }} else {return emptyList()}
                 else -> emptyList()
             }
         }

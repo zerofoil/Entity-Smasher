@@ -41,7 +41,10 @@ class Functions(private val plugin: EntitySmasher) {
             "unknown_command" to "&cSorry, but i don't recognize this command.",
             "allow_players" to "false",
             "allow_boat_minecart" to "false",
-            "fall_damage" to "true"
+            "fall_damage" to "true",
+            "reload_start" to "&7Reloading...",
+            "reload_end" to "&aReloaded!",
+            "allow_monsters" to "true"
         )
     }
 
