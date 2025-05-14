@@ -26,9 +26,10 @@ Can be really useful when manipulating with monsters or animals, to keep them in
 
 ### To-Do
 
-- [x] Keep message empty to not send
+- [x] Keep message empty to not send it
 - [ ] Permission system
 - [ ] /es player [nick] - Instant player teleport + auto select
+- [ ] /es distance [val] - Set a distance using command
 
 ---
 
