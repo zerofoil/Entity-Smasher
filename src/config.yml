@@ -1,7 +1,11 @@
+# Require sneak to select an entity
 sneak_to_select: true
+# Require sneak to deselect an entity (on block)
 sneak_to_deselect: true
+# Default distance set when selecting an entity
 default_distance: 10
 
+# MESSAGES
 entity_select: "&aEntity selected."
 entity_deselect: "&cEntity deselected."
 entity_deselect_death: "&cEntity unavailable, deselecting..."
@@ -9,14 +13,24 @@ entity_already_selected: "&cYou have already entity selected! Deselect first."
 unknown_command: "&cSorry, but i don't recognize this command."
 reload_start: "&7Reloading..."
 reload_end: "&aReloaded!"
-
-scroll_zoom: true
 changed_distance: "&aDistance changed to %distance%"
+# MESSAGES END
+
+# Allow changing distance using scroll wheel
+scroll_zoom: true
+# Minimum limit the distance can be set to
 distance_limit_min: 2
-distance_limit_max: 20
-distance_scroll_step: 0.2
+# Maximum limit the distance can be set to
+distance_limit_max: 10
+# Distance step for each scroll
+distance_scroll_step: 1
+# Show boom particles when entity dies
 death_particles: true
+# Allow picking up players
 allow_players: false
+# Allow picking up boats and minecarts (can fly)
 allow_boat_minecart: false
+# Allow picking up monsters
 allow_monsters: true
+# Make entities take fall damage
 fall_damage: true

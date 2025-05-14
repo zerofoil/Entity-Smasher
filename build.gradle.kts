@@ -12,6 +12,7 @@ repositories {
 
 dependencies {
     compileOnly("org.spigotmc:spigot-api:1.20.1-R0.1-SNAPSHOT")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 }
 
 java {
