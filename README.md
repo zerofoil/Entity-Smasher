@@ -6,7 +6,7 @@ With right click, you can grab (almost) any entity, move with your cursor to rep
 
 Can be really useful when manipulating with monsters or animals, to keep them in cages, or just smash them for fun :)
 
-!!! warning This plugin has not been tested as much. If a config option is not provided in a correct way, error may occur.
+**This plugin has not been tested as much. If a config option is not provided in a correct way, error may occur.**
 
 ---
 
