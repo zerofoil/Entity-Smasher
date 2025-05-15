@@ -1,5 +1,5 @@
 name: EntitySmasher
-version: 1
+version: 1.0
 main: EntitySmasher.EntitySmasher
 api-version: 1.13
 commands:

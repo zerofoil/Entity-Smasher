@@ -3,7 +3,7 @@ plugins {
 }
 
 group = "Entity Smasher"
-version = "1"
+version = "1.0"
 
 repositories {
     mavenCentral()
