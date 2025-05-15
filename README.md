@@ -4,7 +4,7 @@
 The plugin is simple to use and comes with a config file full of options so you can tweak behavior, and restrictions to your needs.
 With right click, you can grab (almost) any entity, move with your cursor to reposition it, and place it where you want. Right click any block to deselect, or use command.
 
-![](https://github.com/zerofoil/Entity-Smasher/blob/main/show.gif?raw=true)
+![](/show.gif)
 
 Can be really useful when manipulating with monsters or animals, to keep them in cages, or just smash them for fun :)
 
