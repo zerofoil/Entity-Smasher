@@ -33,6 +33,7 @@ class Functions(private val plugin: EntitySmasher) {
             "entity_deselect_death" to "&cEntity unavailable, deselecting...",
             "entity_already_selected" to "&cYou have already entity selected! Deselect first.",
             "scroll_zoom" to "true",
+            "scroll_shift_double" to "true",
             "changed_distance" to "&aDistance changed to %distance%",
             "distance_limit_min" to "2",
             "distance_limit_max" to "10",

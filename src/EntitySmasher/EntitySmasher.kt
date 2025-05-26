@@ -40,6 +40,7 @@ class EntitySmasher : JavaPlugin(), Listener {
         val player = event.player
         val entity = event.rightClicked
         val sneak = player.isSneaking
+        if (!player.hasPermission("entitysmasher.use")) return
 
         when (entity) {
             is Boat, is Minecart -> if (func.get("allow_boat_minecart").equals("false")) return
@@ -131,12 +132,13 @@ class EntitySmasher : JavaPlugin(), Listener {
         val new = event.newSlot
         
         if (func.get("scroll_zoom").equals("true")) {
+            if (!player.hasPermission("entitysmasher.zoom")) return
             try {
-                val distc = active[player]!!["distance"] as Double
+                val distc = active[player]?.get("distance") as Double
                 var max = func.get("distance_limit_max").toDoubleOrNull() ?: 20.0
                 var min = func.get("distance_limit_min").toDoubleOrNull() ?: 2.0
                 var step = func.get("distance_scroll_step").toDoubleOrNull() ?: 0.2
-                if (player.isSneaking) {
+                if (player.isSneaking && func.get("scroll_shift_double").equals("true")) {
                     step = step*2
                 }
                 var newdistc = when {

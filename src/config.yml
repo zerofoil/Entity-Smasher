@@ -18,6 +18,8 @@ changed_distance: "&aDistance changed to %distance%"
 
 # Allow changing distance using scroll wheel
 scroll_zoom: true
+# When sneaking, scroll add and remove distance is doubled
+scroll_shift_double: true
 # Minimum limit the distance can be set to
 distance_limit_min: 2
 # Maximum limit the distance can be set to
