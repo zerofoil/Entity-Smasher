@@ -14,9 +14,18 @@ Can be really useful when manipulating with monsters or animals, to keep them in
 
 ### Features
 - Grab and move entities with your mouse
-- Simple select system
+- Simple select system - right click to select, right click on block to deselect.
 - Highly configurable
 - Works with most entity types
+- Keep config message empty to not send it
+- Use scroll wheel to change entity distance
+- Permissions
+
+---
+
+### Permissions
+- entitysmasher.use - Allows picking up entities
+- entitysmasher.zoom - Allows scroll to change distance
 
 ---
 
@@ -28,8 +37,6 @@ Can be really useful when manipulating with monsters or animals, to keep them in
 
 ### To-Do
 
-- [x] Keep message empty to not send it
-- [ ] Permission system
 - [ ] /es player [nick] - Instant player teleport + auto select
 - [ ] /es distance [val] - Set a distance using command
 
